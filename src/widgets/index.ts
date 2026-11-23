@@ -1,0 +1,6 @@
+export { default as ContactsSection } from './contacts/ContactsSection.vue'
+export { default as ExperienceSection } from './experience/ExperienceSection.vue'
+export { default as KeyProjectSection } from './key-project/KeyProjectSection.vue'
+export { default as PetProjectSection } from './pet-project/PetProjectSection.vue'
+export { default as ProjectsSection } from './projects/ProjectsSection.vue'
+export { default as StackSection } from './stack/StackSection.vue'
