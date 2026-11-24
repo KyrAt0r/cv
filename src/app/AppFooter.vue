@@ -1,5 +1,5 @@
 <template>
-  <footer class="page-footer">Вадим Латыпов · 24 ноября 2026</footer>
+  <footer class="page-footer">Вадим Латыпов · ноябрь 2026</footer>
 </template>
 
 <style scoped>

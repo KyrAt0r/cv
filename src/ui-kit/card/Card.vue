@@ -39,56 +39,51 @@ function trackPointer(event: PointerEvent) {
   isolation: isolate;
   padding: 20px;
   margin-bottom: 14px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(3px);
-  transition: box-shadow 0.25s;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.16),
+      rgba(255, 255, 255, 0.04) 45%,
+      rgba(255, 255, 255, 0.08)
+    ),
+    var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 30px -8px rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s;
 }
 
 .ui-card:hover {
-  box-shadow: 0 0 40px -12px rgba(255, 255, 255, 0.35);
+  border-color: rgba(255, 190, 120, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 40px -8px rgba(255, 150, 80, 0.35);
 }
 
-.ui-card::before,
 .ui-card::after {
   position: absolute;
   inset: -1px;
+  z-index: 0;
   pointer-events: none;
   content: '';
+  background: radial-gradient(
+    calc(var(--cursor-radius) * 2.5) circle at var(--x) var(--y),
+    rgba(255, 170, 90, 0.16),
+    transparent 65%
+  );
   opacity: 0;
   transition: opacity 0.25s;
 }
 
-.ui-card:hover::before,
 .ui-card:hover::after {
   opacity: 1;
-}
-
-.ui-card::before {
-  z-index: 2;
-  padding: 1px;
-  background: radial-gradient(
-    var(--cursor-radius) circle at var(--x) var(--y),
-    #fff,
-    transparent 70%
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-}
-
-.ui-card::after {
-  z-index: 0;
-  background: radial-gradient(
-    var(--cursor-radius) circle at var(--x) var(--y),
-    rgba(255, 255, 255, 0.12),
-    transparent 65%
-  );
 }
 
 .ui-card__header,
