@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { trioooUrl } from '@/assets/companies'
 import { techTagIcons } from '@/assets/icons/tech'
 import dashboardShot from '@/assets/triooo/dashboard.png'
@@ -36,9 +36,11 @@ export interface Project {
 const shots = [
   { src: trainingShot, alt: 'Моё обучение' },
   { src: dashboardShot, alt: 'Панель мониторинга' },
-] as const
+]
 
 const shotIndex = ref(0)
+
+const currentShot = computed(() => shots[shotIndex.value]!)
 
 function stepShot(delta: number) {
   shotIndex.value = (shotIndex.value + delta + shots.length) % shots.length
@@ -290,7 +292,7 @@ const projects: readonly Project[] = [
       </template>
       <template v-if="project.screenshot" #screenshot>
         <div class="shots">
-          <img :src="shots[shotIndex].src" :alt="shots[shotIndex].alt" />
+          <img :src="currentShot.src" :alt="currentShot.alt" />
           <div class="shots__bar">
             <button type="button" aria-label="Предыдущий скриншот" @click="stepShot(-1)">←</button>
             <button

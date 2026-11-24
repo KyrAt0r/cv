@@ -9,6 +9,7 @@ import lintConfig from './lint.config'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/cv/',
   staged: {
     '*': 'vp check --fix',
   },
