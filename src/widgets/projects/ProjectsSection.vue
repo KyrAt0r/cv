@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { trioooUrl } from '@/assets/companies'
 import { techTagIcons } from '@/assets/icons/tech'
+import dashboardShot from '@/assets/triooo/dashboard.png'
+import trainingShot from '@/assets/triooo/training.png'
 import Card from '@/ui-kit/card'
 import Heading from '@/ui-kit/heading'
 import Link from '@/ui-kit/link'
 import List from '@/ui-kit/list'
-import Placeholder from '@/ui-kit/placeholder'
 import Section from '@/ui-kit/section'
 import TagList from '@/ui-kit/tag-list'
 
@@ -31,6 +33,17 @@ export interface Project {
   screenshot?: boolean
 }
 
+const shots = [
+  { src: trainingShot, alt: 'Моё обучение' },
+  { src: dashboardShot, alt: 'Панель мониторинга' },
+] as const
+
+const shotIndex = ref(0)
+
+function stepShot(delta: number) {
+  shotIndex.value = (shotIndex.value + delta + shots.length) % shots.length
+}
+
 const projects: readonly Project[] = [
   {
     title: 'ТриО',
@@ -40,9 +53,11 @@ const projects: readonly Project[] = [
     description: 'Платформа обучения информационной безопасности на Vue 3 и TypeScript.',
     points: [
       'Развивал production-функциональность и архитектуру приложения по FSD.',
-      'Оптимизировал загрузку: lazy-loading для vue-pdf, grapesjs и jszip, tree-shaking, разделение чанков и bundle budget. Сократил размер бандла на 68%.',
-      'Разбил крупные модули на слайсы и сегменты, убрал лишние barrel-экспорты.',
-      'Разрабатывал Vue/TypeScript-компоненты и работал с UI на PrimeVue и Tailwind.',
+      'Оптимизировал загрузку: отдельные чанки для pdf, GrapesJS, Chart.js, PrimeVue и Vue, Router, Pinia. Ускорил первую загрузку страницы.',
+      'Зафиксировал границы FSD в ESLint: Antfu, boundaries и публичное API слайса. На pre-commit запускаются oxfmt, ESLint и Stylelint.',
+      'Разрезал роутер по доменным группам и перевёл navigation guards на return-based API с проверкой прав по meta.code.',
+      'Свёл шаблоны, категории и рассылки к одному send_type и новым контрактам списков.',
+      'Задал формат коммитов и веток type/TRIO-XXXX в dev. Связал GitLab с Jira, чтобы MR был виден из задачи. Для багов зафиксировал формат: роль, стенд, шаги, проблема, ожидаемый результат.',
     ],
     tags: [
       'Vue 3',
@@ -100,6 +115,8 @@ const projects: readonly Project[] = [
       'Effector',
       'TanStack Query',
       'TanStack Router',
+      'Ant Design',
+      'WebSocket',
       'FSD',
       'Vite',
       'Vitest',
@@ -165,7 +182,7 @@ const projects: readonly Project[] = [
     tags: ['Flutter', 'Dart'],
   },
   {
-    title: 'Parma DataGo',
+    title: 'Parma DataGo (Юнигейт, Кластрум)',
     companyLabel: 'PARMA TG',
     description: 'Low-code платформа для быстрого анализа данных.',
     role: "переводил аналитические модули с JavaScript на TypeScript и развивал раздел 'Отчёты'.",
@@ -196,7 +213,7 @@ const projects: readonly Project[] = [
         ],
       },
     ],
-    tags: ['React', 'Angular', 'TypeScript', 'Azure DevOps', 'SharePoint'],
+    tags: ['React', 'Angular', 'TypeScript', 'Module Federation', 'Azure DevOps', 'SharePoint'],
   },
   {
     title: 'Управление ресурсами проектов',
@@ -272,7 +289,23 @@ const projects: readonly Project[] = [
         <TagList :icons="techTagIcons" :tags="project.tags" />
       </template>
       <template v-if="project.screenshot" #screenshot>
-        <Placeholder>[ скриншот проекта ]</Placeholder>
+        <div class="shots">
+          <img :src="shots[shotIndex].src" :alt="shots[shotIndex].alt" />
+          <div class="shots__bar">
+            <button type="button" aria-label="Предыдущий скриншот" @click="stepShot(-1)">←</button>
+            <button
+              v-for="(shot, index) in shots"
+              :key="shot.alt"
+              type="button"
+              class="shots__dot"
+              :class="{ 'is-active': index === shotIndex }"
+              :aria-label="shot.alt"
+              :aria-current="index === shotIndex ? 'true' : undefined"
+              @click="shotIndex = index"
+            />
+            <button type="button" aria-label="Следующий скриншот" @click="stepShot(1)">→</button>
+          </div>
+        </div>
       </template>
     </Card>
   </Section>
@@ -287,5 +320,41 @@ const projects: readonly Project[] = [
 
 .pride {
   border-top-color: var(--fg);
+}
+
+.shots {
+  display: grid;
+  gap: 10px;
+}
+
+.shots img {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.shots__bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.shots__bar button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dim);
+  font: inherit;
+  cursor: pointer;
+}
+
+.shots__bar .shots__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--fg) 40%, transparent);
+}
+
+.shots__bar .shots__dot.is-active {
+  background: var(--fg);
 }
 </style>

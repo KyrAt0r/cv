@@ -90,6 +90,7 @@ function trackPointer(event: PointerEvent) {
 .ui-card__body,
 .ui-card__footer,
 .ui-card__screenshot {
+  padding-top: 20px;
   position: relative;
   z-index: 1;
 }
@@ -116,7 +117,6 @@ function trackPointer(event: PointerEvent) {
   display: block;
   width: 100%;
   height: auto;
-  filter: grayscale(1) contrast(1.1);
 }
 
 .ui-card :deep(p) {

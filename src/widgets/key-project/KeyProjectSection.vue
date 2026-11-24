@@ -1,10 +1,36 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { techTagIcons } from '@/assets/icons/tech'
+import calendarShot from '@/assets/potok/calendar.png'
+import companyShot from '@/assets/potok/company.png'
+import integrationsShot from '@/assets/potok/integrations.png'
+import knowledgeShot from '@/assets/potok/knowledge.png'
+import mailingsShot from '@/assets/potok/mailings.png'
+import meetingsShot from '@/assets/potok/meetings.png'
+import profileShot from '@/assets/potok/profile.png'
+import templatesShot from '@/assets/potok/templates.png'
 import Card from '@/ui-kit/card'
 import Heading from '@/ui-kit/heading'
 import List from '@/ui-kit/list'
 import Section from '@/ui-kit/section'
 import TagList from '@/ui-kit/tag-list'
+
+const shots = [
+  { src: calendarShot, alt: 'Календарь' },
+  { src: meetingsShot, alt: 'Мои встречи' },
+  { src: profileShot, alt: 'Профиль' },
+  { src: companyShot, alt: 'Компания' },
+  { src: templatesShot, alt: 'Шаблоны' },
+  { src: mailingsShot, alt: 'Рассылки' },
+  { src: integrationsShot, alt: 'Интеграции' },
+  { src: knowledgeShot, alt: 'База знаний' },
+] as const
+
+const shotIndex = ref(0)
+
+function stepShot(delta: number) {
+  shotIndex.value = (shotIndex.value + delta + shots.length) % shots.length
+}
 </script>
 
 <template>
@@ -145,6 +171,25 @@ import TagList from '@/ui-kit/tag-list'
           ]"
         />
       </template>
+      <template #screenshot>
+        <div class="shots">
+          <img :src="shots[shotIndex].src" :alt="shots[shotIndex].alt" />
+          <div class="shots__bar">
+            <button type="button" aria-label="Предыдущий скриншот" @click="stepShot(-1)">←</button>
+            <button
+              v-for="(shot, index) in shots"
+              :key="shot.alt"
+              type="button"
+              class="shots__dot"
+              :class="{ 'is-active': index === shotIndex }"
+              :aria-label="shot.alt"
+              :aria-current="index === shotIndex ? 'true' : undefined"
+              @click="shotIndex = index"
+            />
+            <button type="button" aria-label="Следующий скриншот" @click="stepShot(1)">→</button>
+          </div>
+        </div>
+      </template>
     </Card>
   </Section>
 </template>
@@ -158,5 +203,41 @@ import TagList from '@/ui-kit/tag-list'
 
 .pride {
   border-top-color: var(--fg);
+}
+
+.shots {
+  display: grid;
+  gap: 10px;
+}
+
+.shots img {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.shots__bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.shots__bar button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dim);
+  font: inherit;
+  cursor: pointer;
+}
+
+.shots__bar .shots__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--fg) 40%, transparent);
+}
+
+.shots__bar .shots__dot.is-active {
+  background: var(--fg);
 }
 </style>

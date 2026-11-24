@@ -16,7 +16,7 @@ import TagList from '@/ui-kit/tag-list'
         <TagList :icons="techTagIcons" :tags="['Vue', 'Tailwind']" />
       </template>
       <template #screenshot>
-        <Placeholder>[ скриншот проекта ]</Placeholder>
+        <Placeholder>[ скоро будетскриншот проекта ]</Placeholder>
       </template>
     </Card>
   </Section>
