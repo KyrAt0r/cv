@@ -1,48 +1,35 @@
-# cv
+# Резюме
 
-This template should help get you started developing with Vue 3 in Vite.
+Одностраничное резюме фронтенд-разработчика. Страница статическая: текст, стек, опыт и контакты собраны во Vue-компонентах, сервер приложению не нужен.
 
-## Recommended IDE Setup
+## Стек
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Vue 3, TypeScript и [Vite+](https://viteplus.dev/guide/). Сборка и проверки идут через единый CLI `vp`, скрипты в `package.json` вызывают его сами.
 
-## Recommended Browser Setup
+Нужны Node.js `~22.18` или `>=24.12` и pnpm `12.23`.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## Запуск
 
 ```sh
 pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Остальные команды:
 
 ```sh
-pnpm build
+pnpm build      # проверка типов и продакшен-сборка в dist
+pnpm preview    # локальный просмотр dist
+pnpm lint       # oxlint
+pnpm format     # oxfmt для src
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## Структура
 
-```sh
-pnpm lint
-```
+Упрощённый Feature-Sliced Design из трёх слоёв:
+
+- `src/app` — оболочка страницы, фон и подключение виджетов. Тексты резюме здесь не лежат.
+- `src/widgets` — блоки страницы и их содержимое: стек, опыт, проекты, контакты.
+- `src/ui-kit` — переиспользуемые компоненты без знаний о резюме.
+
+Зависимости идут только вниз: `app` → `widgets` → `ui-kit`. Импорты между слоями идут через алиас `@`.
